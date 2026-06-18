@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r requirements.txt
+      - name: Python tests
+        run: python3 -m pytest examples/mini-economics/tests
+      - name: Required files
+        run: |
+          test -f START_HERE.md
+          test -f days/day1.md
+          test -f topics/01-foundations/reading.md
+          test -f agent-harness/autonomous_agent_risk_card.md
